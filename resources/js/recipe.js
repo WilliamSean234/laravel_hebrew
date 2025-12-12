@@ -1,4 +1,16 @@
 // Isi dari file: recipe.js
+window.categoryDropdownTemplate = `
+        <select id="category" name="category_id[]"
+            class="w-full bg-gray-900 border border-gray-700 text-sm text-white rounded p-1.5">
+            <option value="" disabled selected> Pilih Kategori</option>
+            {{-- Loop data PHP ke dalam string JS --}}
+            @foreach ($product_category as $category)
+                <option value="{{ $category->id }}">
+                    {{ $category->name }}
+                </option>
+            @endforeach
+        </select>
+    `;
 
 const newRowTemplate = `
         <tr class="bg-gray-800 border-b border-gray-700 ingredient-row">
