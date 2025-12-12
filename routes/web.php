@@ -1,7 +1,9 @@
 <?php
 
 use App\Models\Product;
+use App\Models\MaterialCategory;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\RecipeController;
 
 Route::get('/', function () {
     // return view('welcome');
@@ -18,6 +20,21 @@ Route::get('/', function () {
     ]);
 });
 
+// ===========================================
+// 2. ROUTE UNTUK HALAMAN TAMBAH PRODUK (Full Page View)
+// ===========================================
 Route::get('/create-main', function () {
-    return view('create-main');
-});
+    $product_category = MaterialCategory::latest()->get();
+
+    return view('create-main', [
+        'product_category' => $product_category,
+    ]);
+})->name('product.create');
+
+
+// ===========================================
+// 3. ROUTE UNTUK AJAX (Mengambil Satu Baris Resep)
+// ===========================================
+// Gunakan controller yang sudah kita buat sebelumnya
+Route::get('/get-recipe-row', [RecipeController::class, 'getRecipeRow'])
+    ->name('recipe.row');

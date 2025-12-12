@@ -68,32 +68,16 @@
                 <table class="w-full text-sm text-left text-gray-400">
                     <thead class="text-xs text-gray-200 uppercase bg-gray-700">
                         <tr>
-                            <th scope="col" class="px-6 py-3 w-1/5">KATEGORI</th>
-                            <th scope="col" class="px-6 py-3 w-1/4">NAMA BAHAN</th>
+                            <th scope="col" class="px-6 py-3 w-1/5">NAMA</th>
+                            <th scope="col" class="px-6 py-3 w-1/4">KATEGORI</th>
                             <th scope="col" class="px-6 py-3 w-1/6">RESEP (Qty)</th>
-                            <th scope="col" class="px-6 py-3 w-1/4">HARGA BELI Satuan</th>
+                            <th scope="col" class="px-6 py-3 w-1/4">HARGA BELI</th>
+                            <th scope="col" class="px-6 py-3 w-1/4">TOTAL HARGA</th>
                             <th scope="col" class="px-6 py-3 w-1/12 text-center">Aksi</th>
                         </tr>
                     </thead>
                     <tbody id="recipe-body">
-                        <tr class="bg-gray-800 border-b border-gray-700 ingredient-row">
-                            <td class="p-2"><input type="text" name="ingredient_category[]"
-                                    class="w-full bg-gray-900 border border-gray-700 text-sm text-white rounded p-1.5"
-                                    placeholder="Kategori"></td>
-                            <td class="p-2"><input type="text" name="ingredient_name[]"
-                                    class="w-full bg-gray-900 border border-gray-700 text-sm text-white rounded p-1.5"
-                                    placeholder="Nama Bahan"></td>
-                            <td class="p-2"><input type="number" name="ingredient_recipe[]" min="0" value="0"
-                                    class="w-full bg-gray-900 border border-gray-700 text-sm text-white rounded p-1.5"
-                                    placeholder="0"></td>
-                            <td class="p-2"><input type="number" name="ingredient_cost[]" min="0" value="0"
-                                    class="w-full bg-gray-900 border border-gray-700 text-sm text-white rounded p-1.5"
-                                    placeholder="Rp 0"></td>
-                            <td class="p-2 text-center">
-                                <button type="button" onclick="deleteRow(this)"
-                                    class="font-medium text-red-600 hover:underline text-xs">Hapus</button>
-                            </td>
-                        </tr>
+                        <x-recipe-row :categories="$categories"></x-recipe-row>
                     </tbody>
                 </table>
             </div>
@@ -133,6 +117,7 @@
                 <div class="text-xl font-bold text-blue-400 py-2">HARGA JUAL AKHIR</div>
                 <div class="text-xl font-extrabold text-white bg-blue-600 rounded p-2 text-right">Rp 19,500</div>
                 <input type="hidden" name="selling_price" value="19500">
+
             </div>
 
             <div class="flex justify-end space-x-4 pt-8">

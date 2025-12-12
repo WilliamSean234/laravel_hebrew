@@ -3,6 +3,10 @@
 namespace Database\Seeders;
 
 // use App\Models\User;
+
+use App\Models\Material;
+use App\Models\MaterialCategory;
+use App\Models\Product;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -15,6 +19,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $this->call([ProductSeeder::class, UserSeeder::class]);
+        $this->call([UserSeeder::class, MaterialCategorySeeder::class, ProductSeeder::class]);
+        Material::factory(100)->recycle(MaterialCategory::all())->create();
     }
 }

@@ -1,3 +1,4 @@
+{{-- dd({{$product_category}}) --}}
 <x-layout>
-    <x-create></x-create>
+    <x-create :categories="$product_category"></x-create>
 </x-layout>
