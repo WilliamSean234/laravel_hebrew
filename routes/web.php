@@ -32,9 +32,3 @@ Route::get('/create-main', function () {
 })->name('product.create');
 
 
-// ===========================================
-// 3. ROUTE UNTUK AJAX (Mengambil Satu Baris Resep)
-// ===========================================
-// Gunakan controller yang sudah kita buat sebelumnya
-Route::get('/get-recipe-row', [RecipeController::class, 'getRecipeRow'])
-    ->name('recipe.row');
