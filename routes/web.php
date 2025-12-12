@@ -5,9 +5,16 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     // return view('welcome');
-    $products = Product::latest()->get();
+    // $products = Product::latest()->get();
+    // dump(request('search'));
+    // $products = Product::latest()->paginate(5)->withQueryString();
+
+    $products = Product::latest();
+
+
     return view('overview', [
-        'products' => $products,
+        'products_count' => $products->filterName(request(['search']))->get()->count(),
+        'products' => $products->filterName(request(['search']))->latest()->paginate(10)->withQueryString()
     ]);
 });
 

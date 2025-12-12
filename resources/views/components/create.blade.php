@@ -76,41 +76,21 @@
                         </tr>
                     </thead>
                     <tbody id="recipe-body">
-                        {{-- Baris Input Bahan Baku (Contoh 1) --}}
-                        <tr class="bg-gray-800 border-b border-gray-700">
-                            <td class="p-2"><input type="text" name="ingredient_category[]" value="susu"
-                                    class="w-full bg-gray-900 border border-gray-700 text-sm text-white rounded p-1.5"
-                                    placeholder="Kategori"></td>
-                            <td class="p-2"><input type="text" name="ingredient_name[]" value="ultramilk"
-                                    class="w-full bg-gray-900 border border-gray-700 text-sm text-white rounded p-1.5"
-                                    placeholder="Nama Bahan"></td>
-                            <td class="p-2"><input type="number" name="ingredient_recipe[]" min="0" value="100"
-                                    class="w-full bg-gray-900 border border-gray-700 text-sm text-white rounded p-1.5"
-                                    placeholder="0"></td>
-                            <td class="p-2"><input type="number" name="ingredient_cost[]" min="0"
-                                    class="w-full bg-gray-900 border border-gray-700 text-sm text-white rounded p-1.5"
-                                    placeholder="Rp 0"></td>
-                            <td class="p-2 text-center">
-                                <button type="button"
-                                    class="font-medium text-red-600 hover:underline text-xs">Hapus</button>
-                            </td>
-                        </tr>
-                        {{-- Baris Input Bahan Baku (Contoh 2) --}}
-                        <tr class="bg-gray-800 border-b border-gray-700">
+                        <tr class="bg-gray-800 border-b border-gray-700 ingredient-row">
                             <td class="p-2"><input type="text" name="ingredient_category[]"
                                     class="w-full bg-gray-900 border border-gray-700 text-sm text-white rounded p-1.5"
-                                    placeholder="es"></td>
+                                    placeholder="Kategori"></td>
                             <td class="p-2"><input type="text" name="ingredient_name[]"
                                     class="w-full bg-gray-900 border border-gray-700 text-sm text-white rounded p-1.5"
-                                    placeholder="es batu"></td>
-                            <td class="p-2"><input type="number" name="ingredient_recipe[]" min="0"
+                                    placeholder="Nama Bahan"></td>
+                            <td class="p-2"><input type="number" name="ingredient_recipe[]" min="0" value="0"
                                     class="w-full bg-gray-900 border border-gray-700 text-sm text-white rounded p-1.5"
                                     placeholder="0"></td>
-                            <td class="p-2"><input type="number" name="ingredient_cost[]" min="0"
+                            <td class="p-2"><input type="number" name="ingredient_cost[]" min="0" value="0"
                                     class="w-full bg-gray-900 border border-gray-700 text-sm text-white rounded p-1.5"
                                     placeholder="Rp 0"></td>
                             <td class="p-2 text-center">
-                                <button type="button"
+                                <button type="button" onclick="deleteRow(this)"
                                     class="font-medium text-red-600 hover:underline text-xs">Hapus</button>
                             </td>
                         </tr>
@@ -118,7 +98,7 @@
                 </table>
             </div>
 
-            <button type="button"
+            <button type="button" id="add-ingredient-btn"
                 class="text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center transition duration-150">
                 + Tambah Bahan Lain
             </button>
