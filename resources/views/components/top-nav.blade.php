@@ -25,9 +25,10 @@
             <div class="flex space-x-1">
 
 
-                <x-nav-link href="/" :active="request()->is('/')">Overview</x-nav-link>
-                <x-nav-link href="/create-main" :active="request()->is('create-main')">COGS</x-nav-link>
-
+                <x-nav-link href="/" :active="request()->is('/')">Tabel Produk</x-nav-link>
+                <x-nav-link href="/create-main" :active="request()->is('create-main')">Tambah Produk</x-nav-link>
+                <x-nav-link href="/sales-main" :active="request()->is('sales-main')">Data Penjualan</x-nav-link>
+                
             </div>
         </div>
     </div>

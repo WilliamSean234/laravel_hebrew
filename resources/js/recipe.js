@@ -20,6 +20,10 @@ const newRowTemplate = `
             <td class="p-2">${window.categoryDropdownTemplate}</td> <td class="p-2"><input type="number" name="ingredient_recipe[]" min="0"
                 class="w-full bg-gray-900 border border-gray-700 text-sm text-white rounded p-1.5 recipe-qty" 
                 placeholder="0" oninput="calculateRowTotal(this)"></td>
+
+            <td class="p-2"><input type="text" name="unit_of_measure[]"
+            class="w-full bg-gray-900 border border-gray-700 text-sm text-white rounded p-1.5 recipe-uom"
+            placeholder=""></td>
             
             <td class="p-2"><input type="number" name="ingredient_cost[]" min="0"
                 class="w-full bg-gray-900 border border-gray-700 text-sm text-white rounded p-1.5 unit-cost" 
@@ -54,7 +58,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    const inputs = ['target_profit_percent', 'tax','tax_percent'];
+    const inputs = ['target_profit_percent', 'tax', 'tax_percent'];
     inputs.forEach(id => {
         const el = document.getElementById(id);
         if (el) {

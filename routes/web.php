@@ -3,7 +3,7 @@
 use App\Models\Product;
 use App\Models\MaterialCategory;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\RecipeController;
+// use App\Http\Controllers\RecipeController;
 
 Route::get('/', function () {
     // return view('welcome');
@@ -32,3 +32,6 @@ Route::get('/create-main', function () {
 })->name('product.create');
 
 
+Route::get('/sales-main', function () {
+    return view('sales-main');
+});

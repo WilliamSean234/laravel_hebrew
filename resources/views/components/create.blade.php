@@ -71,6 +71,7 @@
                             <th scope="col" class="px-6 py-3 w-1/5">NAMA</th>
                             <th scope="col" class="px-6 py-3 w-1/4">KATEGORI</th>
                             <th scope="col" class="px-6 py-3 w-1/6">RESEP (Qty)</th>
+                            <th scope="col" class="px-6 py-3 w-1/6">SATUAN</th>
                             <th scope="col" class="px-6 py-3 w-1/4">HARGA BELI</th>
                             <th scope="col" class="px-6 py-3 w-1/4">TOTAL HARGA</th>
                             <th scope="col" class="px-6 py-3 w-1/12 text-center">Aksi</th>
@@ -97,7 +98,7 @@
             <div class="grid grid-cols-2 gap-4 p-4 bg-gray-900 rounded-lg border border-gray-700">
 
                 {{-- TOTAL BIAYA BAHAN BAKU --}}
-                <div class="text-lg font-bold text-gray-300 py-2">TOTAL BIAYA BAHAN BAKU (COGS)</div>
+                <div class="text-lg font-bold text-gray-300 py-2">TOTAL BIAYA BAHAN BAKU</div>
                 <div id="overall-cogs-display"
                     class="text-lg font-extrabold text-green-500 bg-gray-700 rounded p-2 text-right price-calculation">
                 </div>
@@ -178,7 +179,7 @@
                 </button>
                 <button type="submit"
                     class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center transition duration-150">
-                    Simpan Produk & Harga
+                    Simpan Produk
                 </button>
             </div>
         </form>

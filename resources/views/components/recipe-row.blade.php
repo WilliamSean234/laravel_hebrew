@@ -22,6 +22,11 @@
             class="w-full bg-gray-900 border border-gray-700 text-sm text-white rounded p-1.5 recipe-qty"
             placeholder="0" oninput="calculateRowTotal(this)"></td>
 
+    {{-- UNIT OF MEASURE --}}
+    <td class="p-2"><input type="text" name="unit_of_measure[]"
+            class="w-full bg-gray-900 border border-gray-700 text-sm text-white rounded p-1.5 recipe-uom"
+            placeholder=""></td>
+
     {{-- HARGA BELI (UNIT COST) --}}
     <td class="p-2">
         <input type="number" name="ingredient_cost[]" min="0"
