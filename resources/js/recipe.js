@@ -54,19 +54,17 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    const inputs = ['overhead_cost', 'target_profit_percent', 'tax'];
+    const inputs = ['target_profit_percent', 'tax'];
     inputs.forEach(id => {
         const el = document.getElementById(id);
         if (el) {
             el.addEventListener('input', window.calculateSellingPrice);
-            el.addEventListener('input', window.calculateProfitValue);
 
         }
     });
 
     // Panggil perhitungan untuk baris yang sudah ada saat halaman dimuat
     window.updateOverallCOGS();
-    window.calculateProfitValue();
     window.calculateSellingPrice();
 });
 
@@ -163,9 +161,33 @@ window.updateOverallCOGS = function () {
     window.calculateSellingPrice();
 };
 
+window.formatOverhead = function (element) {
+    // 1. Ambil hanya angka dari input
+    let value = element.value.replace(/[^0-9]/g, '');
+
+    // 2. Simpan angka murni ke input hidden untuk perhitungan
+    const hiddenInput = document.getElementById('overhead_cost');
+    hiddenInput.value = value || 0;
+
+    // 3. Format tampilan menjadi Rupiah
+    if (value) {
+        element.value = new Intl.NumberFormat('id-ID', {
+            style: 'currency',
+            currency: 'IDR',
+            minimumFractionDigits: 0
+        }).format(value);
+    } else {
+        element.value = '';
+    }
+
+    // 4. Trigger perhitungan ulang harga jual
+    window.calculateSellingPrice();
+};
+
 window.calculateSellingPrice = function () {
     // 1. Ambil Nilai Dasar
     const totalCOGS = window.getRawCOGS();
+    // Mengambil dari input hidden (angka murni)
     const overhead = parseFloat(document.getElementById('overhead_cost').value) || 0;
     const profitPercent = parseFloat(document.getElementById('target_profit_percent').value) || 0;
     const taxPercent = parseFloat(document.getElementById('tax').value) || 0;

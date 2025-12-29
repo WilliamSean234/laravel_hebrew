@@ -102,11 +102,17 @@
                     class="text-lg font-extrabold text-green-500 bg-gray-700 rounded p-2 text-right price-calculation">
                 </div>
 
-                {{-- Biaya Overhead (overhead_cost) --}}
-                <label for="overhead_cost" class="text-md text-gray-300 py-2">Biaya Overhead (opsional)</label>
-                <input type="number" id="overhead_cost" name="overhead_cost" min="0"
-                    class="bg-gray-700 border border-gray-600 text-white text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 text-right price-calculation">
+                {{-- Biaya Overhead --}}
+                <label for="overhead_cost_display" class="text-md text-gray-300 py-2">Biaya Overhead (opsional)</label>
+                <div class="relative">
+                    <input type="text" id="overhead_cost_display"
+                        class="bg-gray-700 border border-gray-600 text-white text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 text-right w-full"
+                        placeholder="Rp 0" oninput="formatOverhead(this)">
 
+                    {{-- Input hidden inilah yang akan dikirim ke backend & digunakan untuk hitungan JS --}}
+                    <input type="hidden" id="overhead_cost" name="overhead_cost" value="0">
+                </div>
+                
                 {{-- Baris 3: Profit dan Pajak (Dibagi 2 Kolom Sejajar) --}}
                 {{-- BARIS BARU: Gabungan Profit & Pajak --}}
                 <div class="text-md text-gray-300 py-2">Target Profit (%)</div>
