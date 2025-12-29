@@ -112,9 +112,8 @@
                     {{-- Input hidden inilah yang akan dikirim ke backend & digunakan untuk hitungan JS --}}
                     <input type="hidden" id="overhead_cost" name="overhead_cost" value="0">
                 </div>
-                
+
                 {{-- Baris 3: Profit dan Pajak (Dibagi 2 Kolom Sejajar) --}}
-                {{-- BARIS BARU: Gabungan Profit & Pajak --}}
                 <div class="text-md text-gray-300 py-2">Target Profit (%)</div>
                 <div class="grid grid-cols-2 gap-2">
                     {{-- Input Profit % --}}
@@ -134,14 +133,33 @@
                     </div>
                 </div>
 
-                <label for="target_profit" class="text-md text-gray-300 py-2">Target Profit (%)</label>
-                <input type="number" id="target_profit" name="target_profit" min="0"
-                    class="bg-gray-700 border border-gray-600 text-white text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 text-right price-calculation">
-
                 {{-- Pajak Penjualan --}}
-                <label for="tax" class="text-md text-gray-300 py-2">Pajak Penjualan (%)</label>
+                
+                {{-- <label for="tax" class="text-md text-gray-300 py-2">Pajak Penjualan (%)</label>
                 <input type="number" id="tax" name="tax" min="0"
                     class="bg-gray-700 border border-gray-600 text-white text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 text-right price-calculation">
+                --}}
+                
+                <div class="text-md text-gray-300 py-2">Pajak Penjualan (%)</div>
+                <div class="grid grid-cols-2 gap-2">
+                    {{-- Input Tax % --}}
+                    <div class="relative">
+                        <input type="number" id="tax_percent" name="tax_percent" min="0"
+                            class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 text-right pr-7 price-calculation"
+                            placeholder="">
+                        <div
+                            class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none text-xs text-gray-400">
+                            %</div>
+                    </div>
+                    {{-- Tax dalam Rupiah - readonly --}}
+                    <div class="relative">
+                        <input type="text" id="tax_nominal" name="tax_nominal" min="0"
+                            class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 text-right pr-7 price-calculation"
+                            placeholder="" readonly value="0">
+                    </div>
+                </div>
+
+
 
                 {{-- HARGA JUAL (selling_price) --}}
                 <div class="text-xl font-bold text-blue-400 py-2">HARGA JUAL AKHIR</div>

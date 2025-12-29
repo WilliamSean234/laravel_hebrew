@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    const inputs = ['target_profit_percent', 'tax'];
+    const inputs = ['target_profit_percent', 'tax','tax_percent'];
     inputs.forEach(id => {
         const el = document.getElementById(id);
         if (el) {
@@ -190,7 +190,7 @@ window.calculateSellingPrice = function () {
     // Mengambil dari input hidden (angka murni)
     const overhead = parseFloat(document.getElementById('overhead_cost').value) || 0;
     const profitPercent = parseFloat(document.getElementById('target_profit_percent').value) || 0;
-    const taxPercent = parseFloat(document.getElementById('tax').value) || 0;
+    const taxPercent = parseFloat(document.getElementById('tax_percent').value) || 0;
 
     // 2. Kalkulasi
     // Langkah A: Total Biaya Dasar (Bahan + Overhead)
@@ -199,30 +199,40 @@ window.calculateSellingPrice = function () {
     // Langkah B: Hitung Nominal Profit dari baseCost
     const profitNominal = baseCost * (profitPercent / 100);
     const profitNominalInput = document.getElementById('target_profit_nominal');
+
+    // Menggunakan .value karena elemennya adalah <input>
+    // Gunakan .toFixed(0) untuk angka bulat atau .toFixed(2) jika ingin desimal
+    // profitNominalInput.value = Math.round(profitNominal); 
     if (profitNominalInput) {
-        // Menggunakan .value karena elemennya adalah <input>
-        // Gunakan .toFixed(0) untuk angka bulat atau .toFixed(2) jika ingin desimal
-        // profitNominalInput.value = Math.round(profitNominal); 
+        // Kita gunakan Intl.NumberFormat untuk format Rupiah
+        const formattedProfit = new Intl.NumberFormat('id-ID', {
+            style: 'currency',
+            currency: 'IDR',
+            minimumFractionDigits: 0
+        }).format(profitNominal);
 
-        if (profitNominalInput) {
-            // Kita gunakan Intl.NumberFormat untuk format Rupiah
-            const formattedProfit = new Intl.NumberFormat('id-ID', {
-                style: 'currency',
-                currency: 'IDR',
-                minimumFractionDigits: 0
-            }).format(profitNominal);
-
-            // Jika input type="text", gunakan .value
-            profitNominalInput.value = formattedProfit;
-        }
+        // Jika input type="text", gunakan .value
+        profitNominalInput.value = formattedProfit;
     }
+
     // -------------------------
 
     // Langkah C: Harga sebelum pajak
     const priceBeforeTax = baseCost + profitNominal;
-
     // Langkah D: Hitung Nominal Pajak dari priceBeforeTax
     const taxNominal = priceBeforeTax * (taxPercent / 100);
+    const taxNominalInput = document.getElementById('tax_nominal');
+    if (taxNominalInput) {
+        const formattedTax = new Intl.NumberFormat('id-ID', {
+            style: 'currency',
+            currency: 'IDR',
+            minimumFractionDigits: 0
+        }).format(taxNominal);
+
+        // Jika input type="text", gunakan .value
+        taxNominalInput.value = formattedTax;
+
+    }
 
     // Langkah E: Total Akhir
     const finalSellingPrice = priceBeforeTax + taxNominal;
