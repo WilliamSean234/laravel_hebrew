@@ -24,7 +24,7 @@
 
     {{-- HARGA BELI (UNIT COST) --}}
     <td class="p-2">
-        <input type="number" name="ingredient_cost[]" min="0" value="0"
+        <input type="number" name="ingredient_cost[]" min="0"
             class="w-full bg-gray-900 border border-gray-700 text-sm text-white rounded p-1.5 unit-cost"
             placeholder="Rp 0" oninput="calculateRowTotal(this)">
     </td>

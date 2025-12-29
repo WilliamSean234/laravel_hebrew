@@ -77,7 +77,9 @@
                         </tr>
                     </thead>
                     <tbody id="recipe-body">
-                        <x-recipe-row :categories="$categories"></x-recipe-row>
+                        @for ($i = 0; $i < 5; $i++)
+                            <x-recipe-row :categories="$categories"></x-recipe-row>
+                        @endfor
                     </tbody>
                 </table>
             </div>
@@ -96,27 +98,52 @@
 
                 {{-- TOTAL BIAYA BAHAN BAKU --}}
                 <div class="text-lg font-bold text-gray-300 py-2">TOTAL BIAYA BAHAN BAKU (COGS)</div>
-                <div class="text-lg font-extrabold text-green-500 bg-gray-700 rounded p-2 text-right">Rp 12,350</div>
+                <div id="overall-cogs-display"
+                    class="text-lg font-extrabold text-green-500 bg-gray-700 rounded p-2 text-right price-calculation">
+                </div>
 
                 {{-- Biaya Overhead (overhead_cost) --}}
                 <label for="overhead_cost" class="text-md text-gray-300 py-2">Biaya Overhead (opsional)</label>
-                <input type="number" id="overhead_cost" name="overhead_cost" min="0" value="500"
-                    class="bg-gray-700 border border-gray-600 text-white text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 text-right">
+                <input type="number" id="overhead_cost" name="overhead_cost" min="0"
+                    class="bg-gray-700 border border-gray-600 text-white text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 text-right price-calculation">
 
-                {{-- Target Profit --}}
+                {{-- Baris 3: Profit dan Pajak (Dibagi 2 Kolom Sejajar) --}}
+                {{-- BARIS BARU: Gabungan Profit & Pajak --}}
+                <div class="text-md text-gray-300 py-2">Target Profit (%)</div>
+                <div class="grid grid-cols-2 gap-2">
+                    {{-- Input Profit % --}}
+                    <div class="relative">
+                        <input type="number" id="target_profit_percent" name="target_profit_percent" min="0"
+                            class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 text-right pr-7 price-calculation"
+                            placeholder="">
+                        <div
+                            class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none text-xs text-gray-400">
+                            %</div>
+                    </div>
+                    {{-- Profit dalam Rupiah - readonly --}}
+                    <div class="relative">
+                        <input type="text" id="target_profit_nominal" name="target_profit_nominal" min="0"
+                            class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 text-right pr-7 price-calculation"
+                            placeholder="" readonly value="0">
+                    </div>
+                </div>
+
                 <label for="target_profit" class="text-md text-gray-300 py-2">Target Profit (%)</label>
-                <input type="number" id="target_profit" name="target_profit" min="0" value="30"
-                    class="bg-gray-700 border border-gray-600 text-white text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 text-right">
+                <input type="number" id="target_profit" name="target_profit" min="0"
+                    class="bg-gray-700 border border-gray-600 text-white text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 text-right price-calculation">
 
                 {{-- Pajak Penjualan --}}
                 <label for="tax" class="text-md text-gray-300 py-2">Pajak Penjualan (%)</label>
-                <input type="number" id="tax" name="tax" min="0" value="10"
-                    class="bg-gray-700 border border-gray-600 text-white text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 text-right">
+                <input type="number" id="tax" name="tax" min="0"
+                    class="bg-gray-700 border border-gray-600 text-white text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 text-right price-calculation">
 
                 {{-- HARGA JUAL (selling_price) --}}
                 <div class="text-xl font-bold text-blue-400 py-2">HARGA JUAL AKHIR</div>
-                <div class="text-xl font-extrabold text-white bg-blue-600 rounded p-2 text-right">Rp 19,500</div>
-                <input type="hidden" name="selling_price" value="19500">
+                <div id="selling-price-display"
+                    class="text-xl font-extrabold text-white bg-blue-600 rounded p-2 text-right">
+                </div>
+                {{-- <input type="hidden" name="selling_price" value="0"> --}}
+                <input type="hidden" name="selling_price" id="selling_price_input" value="0">
 
             </div>
 

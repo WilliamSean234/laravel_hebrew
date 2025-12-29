@@ -17,11 +17,11 @@ const newRowTemplate = `
             <td class="p-2"><input type="text" name="ingredient_category[]" 
                 class="w-full bg-gray-900 border border-gray-700 text-sm text-white rounded p-1.5" placeholder="Nama"></td>
             
-            <td class="p-2">${window.categoryDropdownTemplate}</td> <td class="p-2"><input type="number" name="ingredient_recipe[]" min="0" value="0"
+            <td class="p-2">${window.categoryDropdownTemplate}</td> <td class="p-2"><input type="number" name="ingredient_recipe[]" min="0"
                 class="w-full bg-gray-900 border border-gray-700 text-sm text-white rounded p-1.5 recipe-qty" 
                 placeholder="0" oninput="calculateRowTotal(this)"></td>
             
-            <td class="p-2"><input type="number" name="ingredient_cost[]" min="0" value="0"
+            <td class="p-2"><input type="number" name="ingredient_cost[]" min="0"
                 class="w-full bg-gray-900 border border-gray-700 text-sm text-white rounded p-1.5 unit-cost" 
                 placeholder="Rp 0" oninput="calculateRowTotal(this)"></td>
             
@@ -54,8 +54,20 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    const inputs = ['overhead_cost', 'target_profit_percent', 'tax'];
+    inputs.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+            el.addEventListener('input', window.calculateSellingPrice);
+            el.addEventListener('input', window.calculateProfitValue);
+
+        }
+    });
+
     // Panggil perhitungan untuk baris yang sudah ada saat halaman dimuat
     window.updateOverallCOGS();
+    window.calculateProfitValue();
+    window.calculateSellingPrice();
 });
 
 
@@ -77,6 +89,8 @@ window.deleteRow = function (buttonElement) {
         // Opsional: Beri peringatan jika hanya 1 baris tersisa
         alert("Minimal satu bahan baku harus dipertahankan.");
     }
+    updateOverallCOGS()
+    calculateSellingPrice()
 }
 
 // ==========================================
@@ -119,29 +133,25 @@ window.calculateRowTotal = function (inputElement) {
 
     // Opsional: Update Total COGS Keseluruhan
     updateOverallCOGS();
+    calculateSellingPrice();
+};
+
+// Mengambil nilai COGS murni sebagai angka untuk perhitungan internal
+window.getRawCOGS = function () {
+    const allTotalValueInputs = document.querySelectorAll('.total-cost-value');
+    let grandTotal = 0;
+    allTotalValueInputs.forEach(input => {
+        grandTotal += parseFloat(input.value) || 0;
+    });
+    return grandTotal;
 };
 
 
-// FUNGSI PENTING: Mendefinisikan deleteRow secara GLOBAL (di window) 
-// ... (Kode deleteRow tidak berubah) ...
-
-
-// ==========================================
-// FUNGSI OPTIONAL: Menghitung total keseluruhan COGS (Jika digunakan)
-// ==========================================
 window.updateOverallCOGS = function () {
-    // PERBAIKAN: Cari semua input TERSEMBUNYI yang menyimpan nilai angka (total-cost-value)
-    const allTotalValueInputs = document.querySelectorAll('.total-cost-value');
-    let grandTotal = 0;
-
-    allTotalValueInputs.forEach(input => {
-        // Ambil nilai angka langsung dari attribute value
-        grandTotal += parseFloat(input.value) || 0;
-    });
-
+    const grandTotal = window.getRawCOGS();
     const cogsDisplay = document.getElementById('overall-cogs-display');
+
     if (cogsDisplay) {
-        // Format Total Keseluruhan ke Rupiah untuk ditampilkan
         cogsDisplay.textContent = grandTotal.toLocaleString('id-ID', {
             style: 'currency',
             currency: 'IDR',
@@ -149,5 +159,68 @@ window.updateOverallCOGS = function () {
             maximumFractionDigits: 0
         });
     }
+    // Setiap kali COGS berubah, harga jual harus dihitung ulang
+    window.calculateSellingPrice();
 };
 
+window.calculateSellingPrice = function () {
+    // 1. Ambil Nilai Dasar
+    const totalCOGS = window.getRawCOGS();
+    const overhead = parseFloat(document.getElementById('overhead_cost').value) || 0;
+    const profitPercent = parseFloat(document.getElementById('target_profit_percent').value) || 0;
+    const taxPercent = parseFloat(document.getElementById('tax').value) || 0;
+
+    // 2. Kalkulasi
+    // Langkah A: Total Biaya Dasar (Bahan + Overhead)
+    const baseCost = totalCOGS + overhead;
+
+    // Langkah B: Hitung Nominal Profit dari baseCost
+    const profitNominal = baseCost * (profitPercent / 100);
+    const profitNominalInput = document.getElementById('target_profit_nominal');
+    if (profitNominalInput) {
+        // Menggunakan .value karena elemennya adalah <input>
+        // Gunakan .toFixed(0) untuk angka bulat atau .toFixed(2) jika ingin desimal
+        // profitNominalInput.value = Math.round(profitNominal); 
+
+        if (profitNominalInput) {
+            // Kita gunakan Intl.NumberFormat untuk format Rupiah
+            const formattedProfit = new Intl.NumberFormat('id-ID', {
+                style: 'currency',
+                currency: 'IDR',
+                minimumFractionDigits: 0
+            }).format(profitNominal);
+
+            // Jika input type="text", gunakan .value
+            profitNominalInput.value = formattedProfit;
+        }
+    }
+    // -------------------------
+
+    // Langkah C: Harga sebelum pajak
+    const priceBeforeTax = baseCost + profitNominal;
+
+    // Langkah D: Hitung Nominal Pajak dari priceBeforeTax
+    const taxNominal = priceBeforeTax * (taxPercent / 100);
+
+    // Langkah E: Total Akhir
+    const finalSellingPrice = priceBeforeTax + taxNominal;
+
+    // 3. Tampilkan Hasil
+    const sellingPriceDisplay = document.getElementById('selling-price-display');
+    if (sellingPriceDisplay) {
+        sellingPriceDisplay.textContent = finalSellingPrice.toLocaleString('id-ID', {
+            style: 'currency',
+            currency: 'IDR',
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0
+        });
+    }
+
+
+
+    // 4. Update hidden input jika ada (opsional, agar nilai terkirim ke backend)
+    let hiddenInput = document.getElementById('selling_price_input');
+    if (hiddenInput) {
+        hiddenInput.value = finalSellingPrice.toFixed(2);
+    }
+};
