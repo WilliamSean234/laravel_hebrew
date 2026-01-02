@@ -5,8 +5,8 @@
             Tambah Produk Minuman Baru
         </h1>
 
-        <form action="#" method="POST" enctype="multipart/form-data">
-
+        <form action="/create-main" method="POST" enctype="multipart/form-data">
+            @csrf
             <h2 class="text-xl font-semibold text-gray-200 border-b border-gray-600 mt-6 pb-2 mb-4">
                 Detail Produk
             </h2>
@@ -17,15 +17,14 @@
                     <label for="name" class="block mb-2 text-sm font-medium text-gray-300">Nama Produk</label>
                     <input type="text" id="name" name="name"
                         class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                        placeholder="Contoh: Lemon Tea Dingin" required>
+                        placeholder="Contoh: Lemon Tea Dingin" >
                 </div>
 
                 {{-- Kategori/Type (type) --}}
                 <div class="mb-4">
                     <label for="type" class="block mb-2 text-sm font-medium text-gray-300">Kategori/Tipe Produk</label>
                     <select id="type" name="type"
-                        class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                        required>
+                        class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
                         <option value="americano">Americano</option>
                         <option value="latte">Latte</option>
                         <option value="mancha">Mancha</option>
@@ -38,7 +37,7 @@
                         (Size)</label>
                     <input type="text" id="size" name="size"
                         class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                        placeholder="Contoh: 500ML" required>
+                        placeholder="Contoh: 500ML" > 
                 </div>
             </div>
 
@@ -47,7 +46,7 @@
                 <label for="description" class="block mb-2 text-sm font-medium text-gray-300">Deskripsi Produk</label>
                 <textarea id="description" name="description" rows="4"
                     class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                    placeholder="Deskripsi singkat tentang rasa atau komposisi utama." required></textarea>
+                    placeholder="Deskripsi singkat tentang rasa atau komposisi utama."></textarea>
             </div>
 
             {{-- Image Path (image_path) --}}
@@ -79,9 +78,12 @@
                     </thead>
                     <tbody id="recipe-body">
                         @for ($i = 0; $i < 5; $i++)
-                            <x-recipe-row :categories="$categories"></x-recipe-row>
+                            <x-recipe-row :categories="$categories" :materials="$materials"></x-recipe-row>
                         @endfor
                     </tbody>
+                    <template id="row-template">
+                        <x-recipe-row :categories="$categories" :materials="$materials"></x-recipe-row>
+                    </template>
                 </table>
             </div>
 
@@ -135,12 +137,12 @@
                 </div>
 
                 {{-- Pajak Penjualan --}}
-                
+
                 {{-- <label for="tax" class="text-md text-gray-300 py-2">Pajak Penjualan (%)</label>
                 <input type="number" id="tax" name="tax" min="0"
                     class="bg-gray-700 border border-gray-600 text-white text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 text-right price-calculation">
                 --}}
-                
+
                 <div class="text-md text-gray-300 py-2">Pajak Penjualan (%)</div>
                 <div class="grid grid-cols-2 gap-2">
                     {{-- Input Tax % --}}

@@ -1,21 +1,25 @@
-{{-- NAMA --}}
 <tr class="bg-gray-800 border-b border-gray-700 ingredient-row">
-    <td class="p-2"><input type="text" name="ingredient_category[]"
+    {{-- NAMA --}}
+    {{-- <td class="p-2"><input type="text" name="ingredient_name[]"
             class="w-full bg-gray-900 border border-gray-700 text-sm text-white rounded p-1.5" placeholder="Nama">
-    </td>
-    {{-- KATEGORI --}}
-    <td class="p-2">
-        <select id="category" name="category_id[]"
+    </td> --}}
+    <td class="p-2 w-1/3">
+        <select name="ingredient_name[]" onchange="updateMaterialCategory(this)"
             class="w-full bg-gray-900 border border-gray-700 text-sm text-white rounded p-1.5">
-            <option value="" disabled selected> Pilih Kategori</option>
+            <option value="" disabled selected>Pilih Bahan</option>
             {{-- Menggunakan variabel dari controller utama --}}
-            @foreach ($categories as $category)
-                <option value="{{ $category->id }}">
-                    {{ $category->name }}
+            @foreach ($materials as $material)
+                <option value="{{ $material->id }}" data-category="{{ $material->category->name }}">
+                    {{ $material->name }}
                 </option>
             @endforeach
         </select>
     </td>
+
+    <td class="p-4"><input type="text" name="category_name[]"
+            class="w-full bg-gray-900 border border-gray-700 text-sm text-white rounded p-1.5 category-display"
+            oninput="" readonly></td>    
+
 
     {{-- RESEP (QTY) --}}
     <td class="p-2"><input type="number" name="ingredient_recipe[]" min="0"

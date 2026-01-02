@@ -14,4 +14,9 @@ class RecipeController extends Controller
             'categories' => $categories
         ]);
     }
+
+    public function storeRecipes(Request $request)
+    {
+        
+    }
 }

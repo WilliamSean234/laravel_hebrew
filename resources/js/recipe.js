@@ -1,57 +1,19 @@
-// Isi dari file: recipe.js
-window.categoryDropdownTemplate = `
-        <select id="category" name="category_id[]"
-            class="w-full bg-gray-900 border border-gray-700 text-sm text-white rounded p-1.5">
-            <option value="" disabled selected> Pilih Kategori</option>
-            {{-- Loop data PHP ke dalam string JS --}}
-            @foreach ($product_category as $category)
-                <option value="{{ $category->id }}">
-                    {{ $category->name }}
-                </option>
-            @endforeach
-        </select>
-    `;
-
-const newRowTemplate = `
-        <tr class="bg-gray-800 border-b border-gray-700 ingredient-row">
-            <td class="p-2"><input type="text" name="ingredient_category[]" 
-                class="w-full bg-gray-900 border border-gray-700 text-sm text-white rounded p-1.5" placeholder="Nama"></td>
-            
-            <td class="p-2">${window.categoryDropdownTemplate}</td> <td class="p-2"><input type="number" name="ingredient_recipe[]" min="0"
-                class="w-full bg-gray-900 border border-gray-700 text-sm text-white rounded p-1.5 recipe-qty" 
-                placeholder="0" oninput="calculateRowTotal(this)"></td>
-
-            <td class="p-2"><input type="text" name="unit_of_measure[]"
-            class="w-full bg-gray-900 border border-gray-700 text-sm text-white rounded p-1.5 recipe-uom"
-            placeholder=""></td>
-            
-            <td class="p-2"><input type="number" name="ingredient_cost[]" min="0"
-                class="w-full bg-gray-900 border border-gray-700 text-sm text-white rounded p-1.5 unit-cost" 
-                placeholder="Rp 0" oninput="calculateRowTotal(this)"></td>
-            
-            <td class="p-2">
-                <span class="total-cost-display block w-full bg-gray-900 border border-gray-700 text-sm text-white rounded p-1.5 text-right font-medium">Rp 0</span>
-                <input type="hidden" name="ingredient_total_cost[]" class="total-cost-value" value="0">
-            </td>
-            
-            <td class="p-2 text-center">
-                <button type="button" onclick="deleteRow(this)"
-                    class="font-medium text-red-600 hover:underline text-xs">Hapus</button>
-            </td>
-        </tr>
-    `;
-
 // Pastikan kode ini dieksekusi setelah DOM selesai dimuat
 document.addEventListener('DOMContentLoaded', function () {
     const addButton = document.getElementById('add-ingredient-btn');
     const tableBody = document.getElementById('recipe-body');
+    const templateElement = document.getElementById('row-template');
+    // const initialRow = tableBody ? tableBody.querySelector('.ingredient-row') : null;
 
-    const initialRow = tableBody ? tableBody.querySelector('.ingredient-row') : null;
-
-    if (addButton && tableBody) {
+    if (addButton && tableBody && templateElement) {
         addButton.addEventListener('click', function () {
             // PERBAIKAN: Gunakan insertAdjacentHTML untuk string
-            tableBody.insertAdjacentHTML('beforeend', newRowTemplate);
+            // tableBody.insertAdjacentHTML('beforeend', newRowTemplate);
+
+            // Ambil konten dari template Blade
+            const clone = templateElement.content.cloneNode(true);
+            // Masukkan ke dalam table body
+            tableBody.appendChild(clone);
 
             // Panggil update COGS setelah baris dimasukkan
             window.updateOverallCOGS();
@@ -137,6 +99,24 @@ window.calculateRowTotal = function (inputElement) {
     updateOverallCOGS();
     calculateSellingPrice();
 };
+
+window.updateMaterialCategory = function (selectElement) {
+    // 1. Ambil option yang dipilih
+    const selectedOption = selectElement.options[selectElement.selectedIndex];
+
+    // 2. Ambil nama kategori dari atribut data-category
+    const categoryName = selectedOption.getAttribute('data-category');
+
+    // 3. Cari elemen input kategori di baris (tr) yang sama
+    const row = selectElement.closest('tr');
+    const categoryInput = row.querySelector('.category-display');
+
+    // 4. Masukkan nilainya ke input
+    if (categoryInput) {
+        categoryInput.value = categoryName || '';
+    }
+
+}
 
 // Mengambil nilai COGS murni sebagai angka untuk perhitungan internal
 window.getRawCOGS = function () {

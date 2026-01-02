@@ -13,6 +13,18 @@ return new class extends Migration
     {
         Schema::create('recipes', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('material_id')->constrained(
+                table: 'materials',
+                indexName: 'material_id'
+            );
+            $table->foreignId('product_id')->constrained(
+                table: 'products',
+                indexName: 'product_id'
+            );
+            $table->string('ingredient_recipe');
+            $table->string('unit_of_measure');
+            $table->bigInteger('ingredient_cost');
+            $table->bigInteger('ingredient_total_cost');
             $table->timestamps();
         });
     }

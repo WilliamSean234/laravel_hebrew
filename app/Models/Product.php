@@ -5,11 +5,25 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Http\Request;
+// use Symfony\Component\HttpFoundation\Request;
 
 class Product extends Model
 {
     /** @use HasFactory<\Database\Factories\ProductFactory> */
     use HasFactory;
+
+    // inisialisasi table product
+    protected $table = 'products';
+    protected $fillable = [
+        'name',
+        'type',
+        'size',
+        'description',
+        'overhead_cost',
+        'selling_price',
+        'image_path',
+    ];
 
     public function scopeFilterName(Builder $query, array $filters)
     {
@@ -33,7 +47,5 @@ class Product extends Model
         // );
 
         // $query->when($filters[''] ?? false, function ($query,   $search) {});
-
-
     }
 }

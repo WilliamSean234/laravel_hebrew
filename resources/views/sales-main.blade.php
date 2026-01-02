@@ -1,4 +1,5 @@
 <x-layout>
+
     <section class="bg-gray-50 dark:bg-gray-900 p-3 sm:p-5">
         <div class="mx-auto max-w-screen-xl px-4 lg:px-12">
             <!-- Start coding here -->
@@ -129,6 +130,7 @@
                                 <th scope="col" class="px-4 py-3">Quantity</th>
                                 <th scope="col" class="px-4 py-3">Price per item</th>
                                 <th scope="col" class="px-4 py-3">Total Transaction</th>
+                                <th scope="col" class="px-4 py-3 min-w-[300px]">Description</th>
                                 <th scope="col" class="px-4 py-3">
                                     <span class="sr-only">Actions</span>
                                 </th>
@@ -144,6 +146,10 @@
                                 <td class="px-4 py-3">Apple</td>
                                 <td class="px-4 py-3">300</td>
                                 <td class="px-4 py-3">$2999</td>
+                                <td class="px-4 py-3 whitespace-normal break-words">
+                                    Ini adalah contoh deskripsi yang sangat panjang untuk melihat apakah kolom ini sudah
+                                    melebar dengan baik dan rapi.
+                                </td>
                                 <td class="px-4 py-3 flex items-center justify-end">
                                     <button id="apple-imac-27-dropdown-button"
                                         data-dropdown-toggle="apple-imac-27-dropdown"
@@ -237,6 +243,35 @@
         </div>
     </section>
 
+    <section class="bg-gray-50 dark:bg-gray-900 p-3 sm:p-5">
+        <div class="mx-auto max-w-screen-xl px-4 lg:px-12">
+
+            <div class="mb-6 bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden p-6">
+                <div class="flex flex-col md:flex-row items-center justify-between mb-4">
+                    <div>
+                        <h5 class="text-xl font-bold leading-none text-gray-900 dark:text-white pr-1">Statistik
+                            Penjualan</h5>
+                    </div>
+                    <div class="inline-flex rounded-md shadow-sm mt-4 md:mt-0" role="group">
+                        <button type="button" onclick="updateChart('daily')"
+                            class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-l-lg hover:bg-gray-100 focus:z-10 focus:ring-2 focus:ring-primary-700 focus:text-primary-700 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-primary-500 dark:focus:text-white">
+                            Harian
+                        </button>
+                        <button type="button" onclick="updateChart('weekly')"
+                            class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border-t border-b border-gray-200 hover:bg-gray-100 focus:z-10 focus:ring-2 focus:ring-primary-700 focus:text-primary-700 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-primary-500 dark:focus:text-white">
+                            Mingguan
+                        </button>
+                        <button type="button" onclick="updateChart('monthly')"
+                            class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-r-md hover:bg-gray-100 focus:z-10 focus:ring-2 focus:ring-primary-700 focus:text-primary-700 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-primary-500 dark:focus:text-white">
+                            Bulanan
+                        </button>
+                    </div>
+                </div>
+                <div id="sales-chart" class="min-h-[300px]"></div>
+            </div>
+        </div>
+    </section>
+
     <!-- Modal toggle -->
 
     <!-- Main modal -->
@@ -323,4 +358,84 @@
             </div>
         </div>
     </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script>
+        // Data Dummy untuk masing-masing filter
+        const chartData = {
+            daily: {
+                categories: ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'],
+                series: [45, 52, 38, 24, 33, 26, 21]
+            },
+            weekly: {
+                categories: ['Minggu 1', 'Minggu 2', 'Minggu 3', 'Minggu 4'],
+                series: [210, 180, 250, 190]
+            },
+            monthly: {
+                categories: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu'],
+                series: [850, 920, 1010, 780, 1100, 950, 1050, 1200]
+            }
+        };
+
+        // Konfigurasi Awal Chart
+        const options = {
+            chart: {
+                height: "100%",
+                maxWidth: "100%",
+                type: "area",
+                fontFamily: "Inter, sans-serif",
+                dropShadow: { enabled: false },
+                toolbar: { show: false },
+            },
+            tooltip: { enabled: true, x: { show: false } },
+            fill: {
+                type: "gradient",
+                gradient: {
+                    opacityFrom: 0.55,
+                    opacityTo: 0,
+                    shade: "#1C64F2",
+                    gradientToColors: ["#1C64F2"],
+                },
+            },
+            dataLabels: { enabled: false },
+            stroke: { width: 4, curve: 'smooth' },
+            grid: {
+                show: true,
+                strokeDashArray: 4,
+                padding: { left: 2, right: 2, top: 0 }
+            },
+            series: [{
+                name: "Total Penjualan",
+                data: chartData.daily.series,
+                color: "#1A56DB",
+            }],
+            xaxis: {
+                categories: chartData.daily.categories,
+                labels: { show: true },
+                axisBorder: { show: false },
+                axisTicks: { show: false },
+            },
+            yaxis: { show: true },
+        };
+
+        // Inisialisasi Chart
+        const chart = new ApexCharts(document.querySelector("#sales-chart"), options);
+        chart.render();
+
+        // Fungsi untuk mengupdate chart berdasarkan filter
+        function updateChart(filterType) {
+            const data = chartData[filterType];
+
+            chart.updateOptions({
+                xaxis: {
+                    categories: data.categories
+                },
+                series: [{
+                    data: data.series
+                }]
+            });
+        }
+    </script>
+
 </x-layout>

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    @vite(['resources/css/app.css', 'resources/js/app.js','resources/js/recipe.js'])
+    @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/recipe.js'])
 
     <title>Product Dashboard - Flowbite Example</title>
 
@@ -24,9 +24,11 @@
 
 
     </div>
+    <x-sweet-alert></x-sweet-alert>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.js"></script>
     <script src="{{ asset('js/app.js') }}"></script>
-    {{-- <script src='resources/js/recipe.js'></script> --}}
+    {{--
+    <script src='resources/js/recipe.js'></script> --}}
 </body>
 
 </html>
