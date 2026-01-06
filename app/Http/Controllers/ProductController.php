@@ -6,6 +6,7 @@ use App\Models\Product;
 use App\Models\Material;
 use Illuminate\Http\Request;
 use App\Models\MaterialCategory;
+use App\Models\Recipe;
 use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
@@ -60,24 +61,82 @@ class ProductController extends Controller
         // DB::table("products")->create([]);
 
         //query tambah data
-        Product::create([
-            'name' => fake()->name(),
-            'type' => 'test',
-            'size' => 'test',
-            'description' => 'test',
-            'overhead_cost' => fake()->numberBetween(2000, 9000),
-            'selling_price' => fake()->numberBetween(10000, 20000),
-            'image_path' => fake()->address(),
+        // Product::create([
+        //     'name' => fake()->name(),
+        //     'type' => 'test',
+        //     'size' => 'test',
+        //     'description' => 'test',
+        //     'overhead_cost' => fake()->numberBetween(2000, 9000),
+        //     'selling_price' => fake()->numberBetween(10000, 20000),
+        //     'image_path' => fake()->address(),
 
-            // 'name' => $request->name,
-            // 'type' => $request->type,
-            // 'size' => $request->size,
-            // 'description' => $request->description,
-            // 'overhead_cost' => $request->overhead_cost,
-            // 'selling_price' => $request->selling_price,
-            // 'image_path' => $request->image_path,
+        //     // 'name' => $request->name,
+        //     // 'type' => $request->type,
+        //     // 'size' => $request->size,
+        //     // 'description' => $request->description,
+        //     // 'overhead_cost' => $request->overhead_cost,
+        //     // 'selling_price' => $request->selling_price,
+        //     // 'image_path' => $request->image_path,
+        // ]);
+
+        // Recipe::create([
+        //     'product_id' => Product::latest()->first()->id,
+        // ]);
+
+
+
+        // Validasi dasar
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'type' => 'required',
+            'ingredient_name' => 'required|array', // Pastikan ada minimal 1 bahan
         ]);
+
+        try {
+            DB::beginTransaction(); // Memulai transaksi database
+
+            // 1. Simpan data ke tabel Products
+            // Pastikan Anda sudah menambahkan fillable di model Product
+            $product = Product::create([
+                'name' => $request->name,
+                'type' => $request->type,
+                'size' => $request->size,
+                'description' => $request->description,
+                'overhead_cost' => $request->overhead_cost,
+                'selling_price' => $request->selling_price,
+                'image_path' => $request->image_path,
+            ]);
+
+            // 2. Simpan data ke tabel Recipes (Multiple Rows)
+            $materials            = $request->ingredient_name; // Ini berisi array material_id
+            $ingredient_recipes   = $request->ingredient_recipe;
+            $unit_of_measures     = $request->unit_of_measure;
+            $ingredient_costs     = $request->ingredient_cost;
+            $ingredient_total_costs = $request->ingredient_total_cost;
+
+            foreach ($materials as $key => $material_id) {
+                // Hanya simpan jika material_id tidak kosong
+                if (!empty($material_id)) {
+                    Recipe::create([
+                        'product_id'            => $product->id, // Mengambil ID produk yang baru saja dibuat
+                        'material_id'           => $material_id,
+                        'ingredient_recipe'     => $ingredient_recipes[$key],
+                        'unit_of_measure'       => $unit_of_measures[$key],
+                        'ingredient_cost'       => $ingredient_costs[$key],
+                        'ingredient_total_cost' => $ingredient_total_costs[$key],
+                    ]);
+                }
+            }
+            DB::commit(); // Simpan permanen jika semua berhasil (success)
+            return redirect('/')->with('success', 'New product and recipes successfully added');
+        } catch (\Exception $e) {
+            DB::rollBack(); // Batalkan semua jika ada error (failure)
+            dd($e->getMessage());
+            return back()->with('error', 'Something went wrong: ' . $e->getMessage());
+        }
+
+
         //setelah data berhasil ditambah
-        return redirect('/')->with('success', 'new product successfully added');
+        // return redirect('/')->with('success', 'ne w product successfully added');
     }
 }
